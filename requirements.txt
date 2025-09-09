@@ -1,0 +1,9 @@
+# Development tools
+black==23.9.1
+flake8==6.1.0
+pytest==7.4.2
+requests==2.31.0
+
+# Load testing
+aiohttp==3.8.6
+httpx==0.25.0
