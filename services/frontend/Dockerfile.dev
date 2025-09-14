@@ -1,0 +1,23 @@
+# services/frontend/Dockerfile.dev
+
+# Use a specific version of Node.js. Alpine is a lightweight version.
+FROM node:20-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package management files first to leverage Docker's layer caching.
+# This way, dependencies are only re-installed if these files change.
+COPY package.json pnpm-lock.yaml ./
+
+# Install project dependencies using pnpm
+RUN npm install -g pnpm && pnpm install
+
+# The 'volumes' in docker-compose will handle copying the rest of the code,
+# so we don't need a COPY command for the source here.
+
+# Expose the port Next.js runs on
+EXPOSE 3000
+
+# The command to start the Next.js development server
+CMD [ "pnpm", "run", "dev" ]

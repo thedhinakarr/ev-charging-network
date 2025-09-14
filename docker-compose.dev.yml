@@ -1,5 +1,8 @@
+# docker-compose.dev.yml
 version: '3.8'
+
 services:
+  # --- Your Existing Services ---
   postgres:
     image: postgres:15
     environment:
@@ -16,7 +19,6 @@ services:
     ports:
       - "6379:6379"
 
-  # Next.js frontend in development mode
   frontend-dev:
     build:
       context: ./services/frontend
@@ -30,8 +32,42 @@ services:
       - NODE_ENV=development
       - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
+      - station-service # Depends on the main API gateway service
+
+  # --- New Backend Services ---
+  station-service:
+    build:
+      context: ./services/station
+    ports:
+      - "8000:8000" # Main API port for the frontend
+    volumes:
+      - ./services/station/src:/app/src
+    environment:
+      # This now points to YOUR postgres service with YOUR credentials
+      - DATABASE_URL=postgresql://admin:password123@postgres:5432/evcharging
+    depends_on:
       - postgres
-      - redis
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+  demand-service:
+    build:
+      context: ./services/demand
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./services/demand/src:/app/src
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload
+
+  pricing-service:
+    build:
+      context: ./services/pricing
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./services/pricing/src:/app/src
+    depends_on:
+      - demand-service # It needs the demand service to be running
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8002 --reload
 
 volumes:
   postgres_data:

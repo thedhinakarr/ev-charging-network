@@ -1,0 +1,40 @@
+# k8s/station-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: station-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: station-service
+  template:
+    metadata:
+      labels:
+        app: station-service
+    spec:
+      containers:
+      - name: station-service
+        image: dan210902/station-service:1.0.0 # Make sure your username is correct here too!
+        ports:
+        - containerPort: 8000
+        env:
+          - name: DATABASE_URL
+            value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres-service:5432/evcharging"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_PASSWORD
+        # --- ADD THIS ENTIRE SECTION ---
+        livenessProbe:
+          httpGet:
+            path: /  # The health check endpoint of your service
+            port: 8000
+          initialDelaySeconds: 15 # Wait 15 seconds before the first check
+          periodSeconds: 10     # Check every 10 seconds after that

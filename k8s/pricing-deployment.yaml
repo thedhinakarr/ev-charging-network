@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pricing-service-deployment
+spec:
+  replicas: 3 # Let's run 3 copies of the pricing service
+  selector:
+    matchLabels:
+      app: pricing-service
+  template:
+    metadata:
+      labels:
+        app: pricing-service
+    spec:
+      containers:
+      - name: pricing-service
+        image: dan210902/pricing-service:1.0.0 # Your image from Docker Hub
+        ports:
+        - containerPort: 8002
