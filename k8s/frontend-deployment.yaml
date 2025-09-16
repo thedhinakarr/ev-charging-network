@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: frontend-dashboard
-        image: dan210902/frontend-dashboard:1.0.0
+        image: dan210902/frontend-dashboard:1.0.4 # Use a new version
         ports:
         - containerPort: 3000
         env:
           - name: NEXT_PUBLIC_API_URL
-            value: "http://station-service:8000" # Points to the station Kubernetes service
+            value: "http://localhost:8000" # Use localhost
           - name: NEXT_PUBLIC_PRICING_API_URL
-            value: "http://pricing-service:8002" # Points to the pricing Kubernetes service
+            value: "http://localhost:8002" # Use localhost

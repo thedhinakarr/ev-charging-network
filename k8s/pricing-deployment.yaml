@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: pricing-service-deployment
 spec:
-  replicas: 3 # Let's run 3 copies of the pricing service
+  replicas: 3
   selector:
     matchLabels:
       app: pricing-service
@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: pricing-service
-        image: dan210902/pricing-service:1.0.0 # Your image from Docker Hub
+        image: dan210902/pricing-service:1.0.0
         ports:
         - containerPort: 8002

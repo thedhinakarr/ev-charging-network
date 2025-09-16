@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: postgres-deployment
 spec:
-  replicas: 1 # The database is stateful, so we only run one copy
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
@@ -14,14 +14,12 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: postgres:15 # The official PostgreSQL image
+        image: postgres:15
         ports:
-        - containerPort: 5432 # Expose the standard Postgres port
+        - containerPort: 5432
         env:
-          # Define environment variables for the database configuration
           - name: POSTGRES_DB
             value: "evcharging"
-          # Securely get the username and password from the Secret we created
           - name: POSTGRES_USER
             valueFrom:
               secretKeyRef:
@@ -33,11 +31,9 @@ spec:
                 name: postgres-secret
                 key: POSTGRES_PASSWORD
         volumeMounts:
-          # Mount the persistent volume at the location where Postgres stores its data
           - name: postgres-storage
             mountPath: /var/lib/postgresql/data
       volumes:
-        # Link the volumeMount to the PersistentVolumeClaim we created
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-pvc

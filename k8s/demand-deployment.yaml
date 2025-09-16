@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: demand-service-deployment
 spec:
-  replicas: 2 # We can run a different number of replicas for each service
+  replicas: 2
   selector:
     matchLabels:
       app: demand-service
@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: demand-service
-        image: dan210902/demand-service:1.0.0 # Your image from Docker Hub
+        image: dan210902/demand-service:1.0.0
         ports:
         - containerPort: 8001

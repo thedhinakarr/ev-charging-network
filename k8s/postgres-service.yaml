@@ -4,8 +4,8 @@ metadata:
   name: postgres-service
 spec:
   selector:
-    app: postgres # This selector connects the service to the postgres deployment
+    app: postgres
   ports:
     - protocol: TCP
-      port: 5432 # The port the service will be available on
-      targetPort: 5432 # The port to forward traffic to on the container
+      port: 5432
+      targetPort: 5432

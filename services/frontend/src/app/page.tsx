@@ -1,4 +1,3 @@
-// services/frontend/src/app/page.tsx
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -25,11 +24,12 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // --- THIS IS THE CHANGE ---
+  // The URLs now point to the NodePort addresses that will be exposed on localhost.
+  // These are provided by the environment variables in the frontend-deployment.yaml.
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const pricingApiUrl = process.env.NEXT_PUBLIC_PRICING_API_URL || 'http://localhost:8002';
 
-  // --- NEW: We've wrapped our data fetching logic in a useCallback hook ---
-  // This allows us to call it from both useEffect and our new Refresh button.
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -52,24 +52,18 @@ export default function HomePage() {
     }
   }, [apiUrl, pricingApiUrl]);
 
-  // useEffect now simply calls our fetchData function on initial load
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // --- NEW: Function to handle deleting a station ---
   const handleDelete = async (stationId: number) => {
-    // Optimistically update the UI by removing the station immediately
     setStations(stations.filter(station => station.id !== stationId));
-
     try {
       const response = await fetch(`${apiUrl}/stations/${stationId}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
-        // If the delete fails, revert the UI change and show an error
         throw new Error('Failed to delete station. Please refresh.');
-        // In a real app, you would add the station back to the list here.
       }
     } catch (err) {
        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -80,7 +74,6 @@ export default function HomePage() {
     <main className="container mx-auto p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold text-gray-800">EV Charging Network Dashboard</h1>
-        {/* --- NEW: Refresh Button --- */}
         <button
           onClick={fetchData}
           disabled={isLoading}
@@ -90,7 +83,6 @@ export default function HomePage() {
         </button>
       </div>
       
-      {/* ... (The rest of the component remains largely the same) ... */}
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4 text-gray-700">Live Station Status</h2>
@@ -109,7 +101,6 @@ export default function HomePage() {
                     </span>
                     <p className="text-xs text-gray-500 mt-1">{station.power_kw} kW</p>
                   </div>
-                  {/* --- NEW: Delete Button --- */}
                   <button
                     onClick={() => handleDelete(station.id)}
                     className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200"

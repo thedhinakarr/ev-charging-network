@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: pricing-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: pricing-service
   ports:
     - protocol: TCP
       port: 8002
       targetPort: 8002
+      

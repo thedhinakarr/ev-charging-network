@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: station-service
 spec:
-  type: ClusterIP # Only exposes the service inside the cluster
+  type: LoadBalancer
   selector:
     app: station-service
   ports:
     - protocol: TCP
       port: 8000
-      targetPort: 8000
+      targetPort: 8000 
