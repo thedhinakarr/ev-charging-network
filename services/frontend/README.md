@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Dashboard
 
-## Getting Started
+## Overview
 
-First, run the development server:
+The Frontend Dashboard is the user interface for the EV Charging Network Intelligence Platform. It provides a real-time, interactive, single-page application for operators to monitor the network's status and grid information.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The dashboard is built with Next.js, React, and TypeScript, and styled with Tailwind CSS for a modern and responsive design.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Live Station Monitoring**: Displays a real-time list of all charging stations, including their name, location, operational status, and power rating.
+* **Dynamic Grid Information**: Shows a dynamically updated charging price and the current grid demand level (e.g., "Peak", "Off-Peak") used to calculate the price.
+* **Interactive Controls**: Features a "Refresh Data" button to fetch the latest information on demand and a "Delete" button for each station to demonstrate live interaction with the backend API.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technology Stack
 
-## Learn More
+* **Framework**: Next.js 14
+* **Language**: TypeScript
+* **UI Library**: React
+* **Styling**: Tailwind CSS
 
-To learn more about Next.js, take a look at the following resources:
+## API Consumption
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The frontend is a pure client of the backend microservices. It consumes data from two primary REST APIs:
+* **Station Service**: To fetch and manage the list of charging stations.
+* **Pricing Service**: To fetch the real-time, dynamic charging price and demand level.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Running Locally
 
-## Deploy on Vercel
+To run this service independently for development:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1.  **Navigate to the Directory**
+    ```bash
+    cd services/frontend
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2.  **Install Dependencies**
+    This project uses `pnpm` for package management.
+    ```bash
+    npm install -g pnpm
+    pnpm install
+    ```
+
+3.  **Run the Development Server**
+    *Note: For the application to be fully functional, the `station-service` and `pricing-service` must be running and accessible on their respective ports.*
+    ```bash
+    pnpm run dev
+    ```
+    The application will be available at `http://localhost:3000`.
