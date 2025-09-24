@@ -6,6 +6,8 @@ This project is a smart city infrastructure platform designed to optimize a netw
 
 ## Architecture
 
+![Architecture Diagram](./architecture.png)
+
 The platform is composed of several independent microservices that communicate via REST APIs:
 
 * **Station Service**: The system of record for all charging station data. It provides a full CRUD API for managing stations and is the only service that communicates directly with the database.
